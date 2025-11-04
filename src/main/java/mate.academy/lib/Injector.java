@@ -9,10 +9,6 @@ public class Injector {
     private final Map<Class<?>, Object> instanceCache = new HashMap<>();
     private final Map<Class<?>, Class<?>> interfaceToImpl = new HashMap<>();
 
-    public static Injector getInjector() {
-        return injector;
-    }
-
     private Injector() {
         interfaceToImpl.put(mate.academy.service.ProductParser.class,
                 mate.academy.service.impl.ProductParserImpl.class);
@@ -20,6 +16,10 @@ public class Injector {
                 mate.academy.service.impl.FileReaderServiceImpl.class);
         interfaceToImpl.put(mate.academy.service.ProductService.class,
                 mate.academy.service.impl.ProductServiceImpl.class);
+    }
+
+    public static Injector getInjector() {
+        return injector;
     }
 
     public Object getInstance(Class<?> interfaceClazz) {
@@ -34,7 +34,7 @@ public class Injector {
                 return instanceCache.get(interfaceClazz);
             }
             if (!interfaceClazz.isAnnotationPresent(Component.class)) {
-                throw  new RuntimeException("Class " + interfaceClazz.getName()
+                throw new RuntimeException("Class " + interfaceClazz.getName()
                         + " is not annotated with @Component");
             }
 
