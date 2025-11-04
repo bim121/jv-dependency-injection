@@ -1,9 +1,9 @@
 package mate.academy.lib;
 
+import java.lang.reflect.Field;
 import mate.academy.service.FileReaderService;
 import mate.academy.service.ProductParser;
 import mate.academy.service.ProductService;
-import java.lang.reflect.Field;
 
 public class Injector {
     private static final Injector injector = new Injector();
@@ -17,9 +17,11 @@ public class Injector {
             if (interfaceClazz.isInterface()) {
                 interfaceClazz = findImplementation(interfaceClazz);
             }
-            if (!interfaceClazz.isAnnotationPresent(Component.class)){
-                throw  new RuntimeException("Class " + interfaceClazz.getName() + " is not annotated with @Component");
+            if (!interfaceClazz.isAnnotationPresent(Component.class)) {
+                throw  new RuntimeException("Class " + interfaceClazz.getName()
+                        + " is not annotated with @Component");
             }
+
             Object instance = interfaceClazz.getDeclaredConstructor().newInstance();
             for (Field field: interfaceClazz.getDeclaredFields()) {
                 if (field.isAnnotationPresent(Inject.class)) {
@@ -31,8 +33,9 @@ public class Injector {
                 }
             }
             return instance;
-        } catch (Exception e){
-            throw new RuntimeException("Failed to create instance of " + interfaceClazz.getName(), e);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create instance of "
+                    + interfaceClazz.getName(), e);
         }
     }
 
